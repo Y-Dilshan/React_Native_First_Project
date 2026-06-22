@@ -29,5 +29,34 @@ const signup = async (req, res) => {
                 message : "User already exists!..."
             })
         }
+
+        // Create User
+        const User = await User.create({
+            name,
+            email,
+            password
+        });
+
+        if(user){
+            res.status(201).json({
+                success : true,
+                data : {
+                    _id : user._id,
+                    name : user.name,
+                    email : user.email,
+                    token:generateToken(user._id)
+                }
+            })
+        }else{
+            res.status(400).json({
+                success : false,
+                message : "Invalid User data"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            success : false,
+            message : error.message
+        })
     }
 }
